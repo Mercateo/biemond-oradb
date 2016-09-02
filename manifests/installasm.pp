@@ -57,7 +57,7 @@ define oradb::installasm(
     unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
   }
 
-  if ($grid_type == 'CRS_CONFIG' and $remote_nodes == undef) {
+  if ($grid_type == 'CRS_CONFIG' and $remote_node == undef) {
     fail('You must specify remote_nodes if grid_type is CRS_CONFIG')
   }
 
