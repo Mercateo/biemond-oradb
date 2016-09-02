@@ -35,6 +35,7 @@ define oradb::installasm(
   $temp_dir                  = '/tmp',
   $remote_node               = undef, # hostname or ip address
   $bash_profile              = true,
+  $remote_node               = undef,   # hostname or ip address
 )
 {
 
