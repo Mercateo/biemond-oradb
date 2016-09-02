@@ -33,6 +33,8 @@ define oradb::installasm(
   $network_interface_list    = undef,
   $storage_option            = undef,
   $temp_dir                  = '/tmp',
+  $remote_node               = undef, # hostname or ip address
+  $bash_profile              = true,
 )
 {
 
@@ -54,7 +56,11 @@ define oradb::installasm(
     unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
   }
 
-  if (!( $version in ['11.2.0.4','12.1.0.1', '12.1.0.2'] )){
+  if ($grid_type == 'CRS_CONFIG' and $remote_nodes == undef) {
+    fail('You must specify remote_nodes if grid_type is CRS_CONFIG')
+  }
+
+  if (!( $version in ['11.2.0.3','11.2.0.4','12.1.0.1', '12.1.0.2'] )){
     fail('Unrecognized database grid install version, use 11.2.0.4, 12.1.0.1 or 12.1.0.2')
   }
 
@@ -118,6 +124,9 @@ define oradb::installasm(
       }
       if ( $version  == '11.2.0.4' ) {
         $file1 =  $file
+      }
+      if ( $version  == '11.2.0.3' ) {
+        $file1 =  "${file}_3of7.zip"
       }
 
       if $remote_file == true {
@@ -206,15 +215,17 @@ define oradb::installasm(
                       File["${download_dir}/grid_install_${version}.rsp"]],
     }
 
-    if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
-      file { "${user_base_dir}/${user}/.bash_profile":
-        ensure  => present,
-        # content => template('oradb/grid_bash_profile.erb'),
-        content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-      }
+    if ( $bash_profile ) {
+	    if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
+	      file { "${user_base_dir}/${user}/.bash_profile":
+	        ensure  => present,
+	        # content => template('oradb/grid_bash_profile.erb'),
+	        content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
+	        mode    => '0775',
+	        owner   => $user,
+	        group   => $group,
+	      }
+	    }
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
@@ -247,6 +258,32 @@ define oradb::installasm(
       cwd       => $grid_base,
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
+    }
+    
+    if ( $grid_type == 'CRS_CONFIG' ) {     
+      # execute the scripts on the remote nodes
+      exec { "run orainstRoot.sh grid script ${title} on ${remote_node}":
+        timeout   => 0,
+        command   => "ssh ${remote_node} ${$oraInventory}/orainstRoot.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $grid_base,
+        logoutput => true,
+        require   => Exec["run root.sh grid script ${title}"],
+      }
+      
+      exec { "run root.sh grid script ${title} on ${remote_node}":
+        timeout   => 0,
+        command   => "ssh ${remote_node} ${grid_home}/root.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $grid_base,
+        logoutput => true,
+        require   => Exec["run orainstRoot.sh grid script ${title} on ${remote_node}"],
+        before    => Exec["run configToolAllCommands grid tool ${title}"],
+      }
     }
 
     file { $grid_home:
