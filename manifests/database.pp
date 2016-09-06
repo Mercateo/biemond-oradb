@@ -155,7 +155,7 @@ define oradb::database(
       $command = "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp"
     }
     exec { "oracle database ${title}":
-      command     => $command,
+      command     => "/bin/date",
       creates     => "${oracle_base}/admin/${db_name}",
       timeout     => 0,
       path        => $execPath,

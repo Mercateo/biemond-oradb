@@ -35,7 +35,6 @@ define oradb::installasm(
   $temp_dir                  = '/tmp',
   $remote_node               = undef, # hostname or ip address
   $bash_profile              = true,
-  $remote_node               = undef,   # hostname or ip address
 )
 {
 
@@ -202,7 +201,7 @@ define oradb::installasm(
     }
 
     exec { "install oracle grid ${title}":
-      command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp'",
+      command     => "/bin/date",
       creates     => "${grid_home}/bin",
       environment => ["USER=${user}","LOGNAME=${user}"],
       timeout     => 0,
@@ -230,7 +229,7 @@ define oradb::installasm(
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
-    if ($::osfamily == 'RedHat') and ($::operatingsystemmajrelease == '7')
+    /*if ($::osfamily == 'RedHat') and ($::operatingsystemmajrelease == '7')
     {
       file {'/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
@@ -367,7 +366,7 @@ define oradb::installasm(
                       Exec["install oracle grid ${title}"],
                       ],
       }
-    }
+    }*/
 
   }
 }

@@ -179,7 +179,8 @@ define oradb::installdb(
     }
 
     exec { "install oracle database ${title}":
-      command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_install_${version}.rsp'",
+      #command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_install_${version}.rsp'",
+      command     => "/bin/date",
       creates     => "${oracle_home}/dbs",
       environment => ["USER=${user}","LOGNAME=${user}"],
       timeout     => 0,
@@ -206,7 +207,7 @@ define oradb::installdb(
       }
     }
 
-    exec { "run root.sh script ${title}":
+    /*exec { "run root.sh script ${title}":
       command   => "${oracle_home}/root.sh",
       user      => 'root',
       group     => 'root',
@@ -273,6 +274,6 @@ define oradb::installdb(
           }
         }
       }
-    }
+    }*/
   }
 }
