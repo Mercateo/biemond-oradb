@@ -11,7 +11,7 @@ PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @grid_home %>/bin
 <% if @grid_type  == 'HA_CONFIG' -%>
 export ORACLE_SID=+ASM
 <% else -%>
-<% if @remote_node == undef -%>
+<% if @remote_node.nil? || @remote_node.empty? -%>
 export ORACLE_SID=+ASM2
 <% else -%>
 export ORACLE_SID=+ASM1
