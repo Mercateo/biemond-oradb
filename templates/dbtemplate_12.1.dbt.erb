@@ -2,7 +2,7 @@
 <DatabaseTemplate name="<%= @db_name %>" description="<%= @db_name %> template" version="12.1.0.0.0">
    <CommonAttributes>
       <option name="OMS" value="false"/>
-      <option name="JSERVER" value="true"/>
+      <option name="JSERVER" value="false"/>
       <option name="SPATIAL" value="false"/>
       <option name="IMEDIA" value="false"/>
       <option name="ORACLE_TEXT" value="false">
@@ -30,26 +30,25 @@
          <initParam name="remote_login_passwordfile" value="EXCLUSIVE"/>
          <initParam name="processes" value="1000"/>
          <initParam name="undo_tablespace" value="UNDOTBS1"/>
-         <initParam name="control_files" value="(&quot;<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;<%= @data_file_destination %>/{DB_UNIQUE_NAME}/control02.ctl&quot;)"/>
+         <initParam name="control_files" value="<%= @control_files %>"/>
          <initParam name="diagnostic_dest" value="{ORACLE_BASE}"/>
-         <initParam name="audit_trail" value="none"/>
+         <initParam name="audit_trail" value="<%= @audit_trail %>"/>
          <initParam name="db_block_size" value="8" unit="KB"/>
-         <initParam name="open_cursors" value="300"/>
-         <initParam name="memory_target" value="%= @memory_total %" unit="MB"/>
-         <initParam name="audit_trail" value="db"/>
-         <initParam name="job_queue_processes" value="4"/>
-         <initParam name="db_recovery_file_dest_size" value="1" unit="GB"/>
-         <initParam name="db_recovery_file_dest" value="<%= @recovery_area_destination %>"/>
+         <initParam name="db_recovery_file_dest_size" value="<%= @db_recovery_file_dest_size_mb %>" unit="MB"/>
+         <% @init_params.each_pair do |key, value_hash| -%>
+         <initParam name="<%= key %>" value="<%= value_hash %>"/>
+         <% end -%>
       </InitParams>
       <MiscParams>
          <databaseType><%= @database_type %></databaseType>
+		 <memoryPercentage><%= @memory_percentage %></memoryPercentage>
+         <recoveryAreaDestination><%= @recovery_area_destination %></recoveryAreaDestination>
          <maxUserConn>20</maxUserConn>
          <customSGA>false</customSGA>
          <characterSet>"<%= @character_set %>"</characterSet>
          <nationalCharacterSet>"<%= @nationalcharacter_set %>"</nationalCharacterSet>
          <archiveLogMode>false</archiveLogMode>
          <initParamFileName>{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/pfile/init.ora</initParamFileName>
-         <percentageMemTOSGA><%= @memory_percentage %></percentageMemTOSGA>
       </MiscParams>
       <SPfile useSPFile="true">{ORACLE_HOME}/dbs/spfile{SID}.ora</SPfile>
    </InitParamAttributes>

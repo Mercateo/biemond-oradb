@@ -38,7 +38,7 @@ define oradb::database(
   $container_database        = false, # 12.1 feature for pluggable database
   $puppet_download_mnt_point = undef,
   $control_files                  = '(&quot;<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;<%= @data_file_destination %>/{DB_UNIQUE_NAME}/control02.ctl&quot;)',
-  $audit_trail                    = 'none',
+  $audit_trail                    = 'DB',
   $db_recovery_file_dest_size_mb  = '1000',
 )
 {
@@ -155,7 +155,7 @@ define oradb::database(
       $command = "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp"
     }
     exec { "oracle database ${title}":
-      command     => "/bin/date",
+      command     => "$command",
       creates     => "${oracle_base}/admin/${db_name}",
       timeout     => 0,
       path        => $execPath,
