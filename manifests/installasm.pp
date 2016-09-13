@@ -33,8 +33,8 @@ define oradb::installasm(
   $network_interface_list    = undef,
   $storage_option            = undef,
   $temp_dir                  = '/tmp',
-  $remote_node               = undef, # hostname or ip address
   $bash_profile              = true,
+  $remote_node               = undef, # hostname or ip address
 )
 {
 
@@ -74,6 +74,10 @@ define oradb::installasm(
 
   if ( !($grid_type in ['CRS_CONFIG','HA_CONFIG','UPGRADE','CRS_SWONLY'])){
     fail('Unrecognized database grid type, please use CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY')
+  }
+
+  if ($grid_type == 'CRS_CONFIG' and $remote_node == undef) {
+    fail('You must specify remote_node if grid_type is CRS_CONFIG')
   }
 
   if ( $grid_base == undef or is_string($grid_base) == false) {fail('You must specify an grid_base') }
@@ -219,17 +223,17 @@ define oradb::installasm(
                       File["${download_dir}/grid_install_${version}.rsp"]],
     }
 
-    if ( $bash_profile ) {
-	    if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
-	      file { "${user_base_dir}/${user}/.bash_profile":
-	        ensure  => present,
-	        # content => template('oradb/grid_bash_profile.erb'),
-	        content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
-	        mode    => '0775',
-	        owner   => $user,
-	        group   => $group,
-	      }
-	    }
+    if ( $bash_profile == true ) {
+      if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
+        file { "${user_base_dir}/${user}/.bash_profile":
+          ensure  => present,
+          # content => template('oradb/grid_bash_profile.erb'),
+          content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+        }
+      }
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
@@ -244,13 +248,14 @@ define oradb::installasm(
 
       exec { 'daemon-reload for ohas':
         command => '/bin/systemctl daemon-reload',
-      } ->
-
-      service { 'ohas.service':
-        ensure => running,
-        enable => true,
-        before => Exec["run root.sh grid script ${title}"],
       }
+      # ->
+
+      # service { 'ohas.service':
+      #   ensure => running,
+      #   enable => true,
+      #   before => Exec["run root.sh grid script ${title}"],
+      # }
     }
 
     exec { "run root.sh grid script ${title}":
@@ -277,6 +282,32 @@ define oradb::installasm(
         require   => Exec["run root.sh grid script ${title}"],
       }
       
+      exec { "run root.sh grid script ${title} on ${remote_node}":
+        timeout   => 0,
+        command   => "ssh ${remote_node} ${grid_home}/root.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $grid_base,
+        logoutput => true,
+        require   => Exec["run orainstRoot.sh grid script ${title} on ${remote_node}"],
+        before    => Exec["run configToolAllCommands grid tool ${title}"],
+      }
+    }
+
+    if ($grid_type == 'CRS_CONFIG') {
+      # execute the scripts on the remote nodes
+      exec { "run orainstRoot.sh grid script ${title} on ${remote_node}":
+        timeout   => 0,
+        command   => "ssh ${remote_node} ${$oraInventory}/orainstRoot.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $grid_base,
+        logoutput => true,
+        require   => Exec["run root.sh grid script ${title}"],
+      }
+
       exec { "run root.sh grid script ${title} on ${remote_node}":
         timeout   => 0,
         command   => "ssh ${remote_node} ${grid_home}/root.sh",
