@@ -47,10 +47,6 @@
          <nationalCharacterSet>"<%= @nationalcharacter_set %>"</nationalCharacterSet>
          <archiveLogMode>false</archiveLogMode>
          <initParamFileName>{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/pfile/init.ora</initParamFileName>
-         <% if @version == '11.2 -%>
-           <memoryPercentage><%= @memory_percentage %></memoryPercentage>
-           <recoveryAreaDestination><%= @recovery_area_destination %></recoveryAreaDestination>		 
-         <% end -%>
       </MiscParams>
       <SPfile useSPFile="true"><%= @spfile %></SPfile>
    </InitParamAttributes>
