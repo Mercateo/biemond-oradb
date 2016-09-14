@@ -295,32 +295,6 @@ define oradb::installasm(
       }
     }
 
-    if ($grid_type == 'CRS_CONFIG') {
-      # execute the scripts on the remote nodes
-      exec { "run orainstRoot.sh grid script ${title} on ${remote_node}":
-        timeout   => 0,
-        command   => "ssh ${remote_node} ${$oraInventory}/orainstRoot.sh",
-        user      => 'root',
-        group     => 'root',
-        path      => $execPath,
-        cwd       => $grid_base,
-        logoutput => true,
-        require   => Exec["run root.sh grid script ${title}"],
-      }
-
-      exec { "run root.sh grid script ${title} on ${remote_node}":
-        timeout   => 0,
-        command   => "ssh ${remote_node} ${grid_home}/root.sh",
-        user      => 'root',
-        group     => 'root',
-        path      => $execPath,
-        cwd       => $grid_base,
-        logoutput => true,
-        require   => Exec["run orainstRoot.sh grid script ${title} on ${remote_node}"],
-        before    => Exec["run configToolAllCommands grid tool ${title}"],
-      }
-    }
-
     file { $grid_home:
       ensure  => directory,
       recurse => false,
