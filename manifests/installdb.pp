@@ -231,19 +231,6 @@ define oradb::installdb(
       }
     }
 
-    if ( $remote_node != undef) {
-      # execute the scripts on the remote nodes
-      exec { "run root.sh script ${title} on ${remote_node}":
-        command   => "ssh ${remote_node} ${oracle_home}/root.sh",
-        user      => 'root',
-        group     => 'root',
-        path      => $execPath,
-        cwd       => $oracle_base,
-        logoutput => true,
-        require   => Exec["run root.sh script ${title}"],
-      }
-    }
-
     if !defined(File[$oracle_home]) {
       file { $oracle_home:
         ensure  => directory,
