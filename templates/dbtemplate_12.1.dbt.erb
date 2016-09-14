@@ -1,5 +1,5 @@
 <?xml version = '1.0'?>
-<DatabaseTemplate name="<%= @db_name %>" description="<%= @db_name %> template" version="12.1.0.0.0">
+<DatabaseTemplate name="<%= @db_name %>" description="<%= @db_name %> template" version="12.1.0.2.0">
    <CommonAttributes>
       <option name="OMS" value="false"/>
       <option name="JSERVER" value="false"/>
@@ -26,7 +26,7 @@
          <initParam name="db_domain" value="<%= @db_domain %>"/>
          <initParam name="dispatchers" value="(PROTOCOL=TCP) (SERVICE={SID}XDB)"/>
          <initParam name="audit_file_dest" value="{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump"/>
-         <initParam name="compatible" value="12.1.0.0.0"/>
+         <initParam name="compatible" value="12.1.0.2.0"/>
          <initParam name="remote_login_passwordfile" value="EXCLUSIVE"/>
          <initParam name="processes" value="1000"/>
          <initParam name="undo_tablespace" value="UNDOTBS1"/>
@@ -50,7 +50,7 @@
          <archiveLogMode>false</archiveLogMode>
          <initParamFileName>{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/pfile/init.ora</initParamFileName>
       </MiscParams>
-      <SPfile useSPFile="true">{ORACLE_HOME}/dbs/spfile{SID}.ora</SPfile>
+      <SPfile useSPFile="true"><%= @spfile %></SPfile>
    </InitParamAttributes>
    <StorageAttributes>
       <ControlfileAttributes id="Controlfile">
@@ -126,9 +126,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/sysaux01.dbf">
-               <id>-1</id>
-            </TablespaceDatafileAttributes>
+            <TablespaceDatafileAttributes id="<%= @data_file_destination %>"/>
          </datafilesList>
       </TablespaceAttributes>
       <TablespaceAttributes id="SYSTEM" con_id="1">
@@ -151,9 +149,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/system01.dbf">
-               <id>-1</id>
-            </TablespaceDatafileAttributes>
+            <TablespaceDatafileAttributes id="<%= @data_file_destination %>"/>
          </datafilesList>
       </TablespaceAttributes>
       <TablespaceAttributes id="TEMP" con_id="1">
@@ -176,9 +172,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/temp01.dbf">
-               <id>-1</id>
-            </TablespaceDatafileAttributes>
+            <TablespaceDatafileAttributes id="<%= @data_file_destination %>"/>
          </datafilesList>
       </TablespaceAttributes>
       <TablespaceAttributes id="UNDOTBS1" con_id="1">
@@ -201,38 +195,32 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/undotbs01.dbf">
-               <id>-1</id>
-            </TablespaceDatafileAttributes>
+            <TablespaceDatafileAttributes id="<%= @data_file_destination %>"/>
          </datafilesList>
       </TablespaceAttributes>
       <RedoLogGroupAttributes id="1">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
          <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0101.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0102.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo01.log" filepath="<%= @data_file_destination %>"/>
       </RedoLogGroupAttributes>
       <RedoLogGroupAttributes id="2">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
          <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0201.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0202.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo02.log" filepath="<%= @data_file_destination %>"/>
       </RedoLogGroupAttributes>
       <RedoLogGroupAttributes id="3">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
-         <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0301.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0302.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <Thread>2</Thread>
+         <member ordinal="0" memberName="redo03.log" filepath="<%= @data_file_destination %>"/>
       </RedoLogGroupAttributes>
       <RedoLogGroupAttributes id="4">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
-         <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0401.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0402.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <Thread>2</Thread>
+         <member ordinal="0" memberName="redo04.log" filepath="<%= @data_file_destination %>"/>
       </RedoLogGroupAttributes>
    </StorageAttributes>
 </DatabaseTemplate>

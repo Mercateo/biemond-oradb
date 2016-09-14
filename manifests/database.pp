@@ -40,6 +40,7 @@ define oradb::database(
   $control_files                  = '(&quot;<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;<%= @data_file_destination %>/{DB_UNIQUE_NAME}/control02.ctl&quot;)',
   $audit_trail                    = 'DB',
   $db_recovery_file_dest_size_mb  = '1000',
+  $spfile                         = '{ORACLE_HOME}/dbs/spfile{SID}.ora',
 )
 {
   if (!( $version in ['11.2','12.1'])) {
