@@ -190,6 +190,39 @@ define oradb::installasm(
         }
       }
     }
+    
+    if versioncmp($version, '12.1.0.1') >= 0 and !defined(Package['cvuqdisk']) {     
+      package { 'cvuqdisk':
+        ensure    => present,
+        source    => "${download_dir}/${file_without_ext}/grid/rpm/cvuqdisk-1.0.9-1.rpm",
+        require   => File["${download_dir}/grid_install_${version}.rsp"],
+        before    => Exec["install oracle grid ${title}"],
+      } 
+      
+      if ( $grid_type == 'CRS_CONFIG' ) {     
+        # transfer the rpm to the remote node
+        exec { "transfer cvuqdisk-1.0.9-1.rpm to ${remote_node}":
+          timeout   => 0,
+          command   => "scp ${download_dir}/${file_without_ext}/grid/rpm/cvuqdisk-1.0.9-1.rpm ${remote_node}:$temp_dir",
+          user      => 'root',
+          group     => 'root',
+          path      => $execPath,
+          cwd       => $grid_base,
+          require   => File["${download_dir}/grid_install_${version}.rsp"],
+        }
+        
+        exec { "install cvuqdisk-1.0.9-1.rpm on ${remote_node}":
+          timeout   => 0,
+          command   => "ssh ${remote_node} rpm -ivh $temp_dir/cvuqdisk-1.0.9-1.rpm",
+          user      => 'root',
+          group     => 'root',
+          path      => $execPath,
+          cwd       => $grid_base,
+          require   => Exec["transfer cvuqdisk-1.0.9-1.rpm to ${remote_node}"],
+          before    => Exec["install oracle grid ${title}"],
+        }   
+      }
+    }
 
     oradb::utils::dborainst{"grid orainst ${version}":
       ora_inventory_dir => $oraInventory,
