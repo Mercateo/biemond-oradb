@@ -44,7 +44,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      creates   => $pdb_datafile_destination,
+      #creates   => $pdb_datafile_destination,
       logoutput => $log_output,
     }
   } else {
