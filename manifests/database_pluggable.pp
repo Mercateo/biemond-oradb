@@ -44,7 +44,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      #creates   => $pdb_datafile_destination,
+      creates   => "${mercateo_oracle::oracle_base}/cfgtoollogs/dbca/${db_name}/${pdb_name}/postPDBCreation.log", 
       logoutput => $log_output,
     }
   } else {
