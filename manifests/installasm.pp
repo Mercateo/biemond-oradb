@@ -189,16 +189,25 @@ define oradb::installasm(
           before    => Exec["install oracle grid ${title}"],
         }
       }
-    }
+    }     
     
     if versioncmp($version, '12.1.0.1') >= 0 and !defined(Package['cvuqdisk']) {     
-      package { 'cvuqdisk':
-        ensure    => present,
-        source    => "${download_dir}/${file_without_ext}/grid/rpm/cvuqdisk-1.0.9-1.rpm",
-        require   => File["${download_dir}/grid_install_${version}.rsp"],
-        before    => Exec["install oracle grid ${title}"],
-      } 
-      
+      if ( $zip_extract ) {
+        package { 'cvuqdisk':
+          ensure    => present,
+          source    => "${download_dir}/${file_without_ext}/grid/rpm/cvuqdisk-1.0.9-1.rpm",
+          require   => Exec["extract ${download_dir}/${file2}"],
+          before    => Exec["install oracle grid ${title}"],
+        }       
+      } else {
+	      package { 'cvuqdisk':
+	        ensure    => present,
+	        source    => "${download_dir}/${file_without_ext}/grid/rpm/cvuqdisk-1.0.9-1.rpm",
+	        require   => File["$download_dir"],
+	        before    => Exec["install oracle grid ${title}"],
+	      } 
+      }
+       
       if ( $grid_type == 'CRS_CONFIG' ) {     
         # transfer the rpm to the remote node
         exec { "transfer cvuqdisk-1.0.9-1.rpm to ${remote_node}":
