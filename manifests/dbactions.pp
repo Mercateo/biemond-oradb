@@ -28,7 +28,7 @@ define oradb::dbactions(
       oracle_product_home_dir => $oracle_home,
       #grid_product_home_dir   => $grid_home,
       os_user                 => $user,
-      db_type                 => 'grid',
+      #db_type                 => 'grid',
     }
   }
 }
