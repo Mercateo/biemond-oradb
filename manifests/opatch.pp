@@ -12,7 +12,8 @@ define oradb::opatch(
   $use_opatchauto_utility    = false,
   $bundle_sub_patch_id       = undef,
   $bundle_sub_folder         = undef,
-  $user                      = 'oracle',
+  $patch_user                = 'oracle',  
+  $extract_user              = 'oracle',   # see issue 135          
   $group                     = 'dba',
   $download_dir              = '/install',
   $ocmrf                     = false,
@@ -48,7 +49,7 @@ define oradb::opatch(
           ensure => present,
           source => "${mountPoint}/${patch_file}",
           mode   => '0775',
-          owner  => $user,
+          owner  => $extract_user,
           group  => $group,
         }
       }
@@ -64,7 +65,7 @@ define oradb::opatch(
             require   => File["${download_dir}/${patch_file}"],
             creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
-            user      => $user,
+            user      => $extract_user,
             group     => $group,
             logoutput => false,
             before    => Db_opatch["${patch_id} ${title}"],
@@ -74,7 +75,7 @@ define oradb::opatch(
             command   => "unzip -n ${mountPoint}/${patch_file} -d ${download_dir}",
             creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
-            user      => $user,
+            user      => $extract_user,
             group     => $group,
             logoutput => false,
             before    => Db_opatch["${patch_id} ${title}"],
@@ -94,7 +95,7 @@ define oradb::opatch(
         db_opatch{ "${patch_id} ${title}":
           ensure                  => $ensure,
           patch_id                => $patch_id,
-          os_user                 => $user,
+          os_user                 => $patch_user,
           oracle_product_home_dir => $oracle_product_home,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
@@ -109,7 +110,7 @@ define oradb::opatch(
         db_opatch{ "${patch_id} ${title}":
           ensure                  => $ensure,
           patch_id                => $patch_id,
-          os_user                 => $user,
+          os_user                 => $patch_user,
           oracle_product_home_dir => $oracle_product_home,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
