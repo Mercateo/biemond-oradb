@@ -12,11 +12,10 @@ define oradb::opatch(
   $use_opatchauto_utility    = false,
   $bundle_sub_patch_id       = undef,
   $bundle_sub_folder         = undef,
-  $patch_user                = 'oracle',  
-  $extract_user              = 'oracle',   # see issue 135          
+  $user                      = 'oracle',           
   $group                     = 'dba',
   $download_dir              = '/install',
-  $ocmrf                     = false,
+  $ocmrf                     = false,       # deprecated with 12c
   $puppet_download_mnt_point = undef,
   $remote_file               = true,
 )
@@ -49,7 +48,7 @@ define oradb::opatch(
           ensure => present,
           source => "${mountPoint}/${patch_file}",
           mode   => '0775',
-          owner  => $extract_user,
+          owner  => $user,
           group  => $group,
         }
       }
@@ -65,7 +64,7 @@ define oradb::opatch(
             require   => File["${download_dir}/${patch_file}"],
             creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
-            user      => $extract_user,
+            user      => $user,
             group     => $group,
             logoutput => false,
             before    => Db_opatch["${patch_id} ${title}"],
@@ -75,7 +74,7 @@ define oradb::opatch(
             command   => "unzip -n ${mountPoint}/${patch_file} -d ${download_dir}",
             creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
-            user      => $extract_user,
+            user      => $user,
             group     => $group,
             logoutput => false,
             before    => Db_opatch["${patch_id} ${title}"],
@@ -95,7 +94,7 @@ define oradb::opatch(
         db_opatch{ "${patch_id} ${title}":
           ensure                  => $ensure,
           patch_id                => $patch_id,
-          os_user                 => $patch_user,
+          os_user                 => $user,
           oracle_product_home_dir => $oracle_product_home,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
@@ -110,7 +109,7 @@ define oradb::opatch(
         db_opatch{ "${patch_id} ${title}":
           ensure                  => $ensure,
           patch_id                => $patch_id,
-          os_user                 => $patch_user,
+          os_user                 => $user,
           oracle_product_home_dir => $oracle_product_home,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
