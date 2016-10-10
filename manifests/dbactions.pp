@@ -7,7 +7,7 @@
 define oradb::dbactions(
   $db_type     = 'database',
   $oracle_home = undef,
-  #$grid_home   = undef,
+  $grid_home   = undef,
   $user        = 'oracle',
   $group       = 'dba',
   $action      = 'start',
@@ -26,9 +26,9 @@ define oradb::dbactions(
       provider                => 'srvctl',
       instance_name           => $db_name,
       oracle_product_home_dir => $oracle_home,
-      #grid_product_home_dir   => $grid_home,
+      grid_product_home_dir   => $grid_home,
       os_user                 => $user,
-      #db_type                 => 'grid',
+      db_type                 => 'grid',
     }
   }
 }
