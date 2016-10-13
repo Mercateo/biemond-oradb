@@ -377,9 +377,8 @@ oracle.install.asm.diskGroup.AUSize=<%= @disk_au_size %>
 #     oracle.install.asm.diskGroup.disks=\\.\ORCLDISKDATA0,\\.\ORCLDISKDATA1
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.disks=<%= @disks %>
-
-#-------------------------------------------------------------------------------
+oracle.install.asm.diskGroup.disks=<% @disks.each do |key, value_hash| -%><%= value_hash['path'] -%>,<%- end %>
+-------------------------------------------------------------------------------
 # The disk discovery string to be used to discover the disks used create a ASM DiskGroup
 #
 # Example:

@@ -12,10 +12,10 @@ define oradb::opatch(
   $use_opatchauto_utility    = false,
   $bundle_sub_patch_id       = undef,
   $bundle_sub_folder         = undef,
-  $user                      = 'oracle',
+  $user                      = 'oracle',           
   $group                     = 'dba',
   $download_dir              = '/install',
-  $ocmrf                     = false,
+  $ocmrf                     = false,       # deprecated with 12c
   $puppet_download_mnt_point = undef,
   $remote_file               = true,
 )

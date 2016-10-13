@@ -217,9 +217,9 @@ define oradb::installdb(
       logoutput => true,
       require   => Exec["install oracle database ${title}"],
     }
-
-    if ( $remote_node != undef) {
-      # execute the scripts on the remote nodes
+    
+    if ( $remote_node != undef) { 
+      # execute the scripts on the remote node
       exec { "run root.sh script ${title} on ${remote_node}":
         command   => "ssh ${remote_node} ${oracle_home}/root.sh",
         user      => 'root',
