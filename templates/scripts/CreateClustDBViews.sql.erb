@@ -1,0 +1,12 @@
+SET VERIFY OFF
+connect "SYS"/"&&sysPassword" as SYSDBA
+set echo on
+spool <%= @download_dir %>/CreateClustDBViews_<%= @sanitized_title %>.log append
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catclust <%= @oracle_home %>/rdbms/admin/catclust.sql;
+spool off
+connect "SYS"/"&&sysPassword" as SYSDBA
+set echo on
+spool <%= @download_dir %>/postDBCreation_<%= @sanitized_title %>.log append
+grant sysdg to sysdg;
+grant sysbackup to sysbackup;
+grant syskm to syskm;

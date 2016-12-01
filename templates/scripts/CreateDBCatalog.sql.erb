@@ -1,0 +1,18 @@
+SET VERIFY OFF
+connect "SYS"/"&&sysPassword" as SYSDBA
+set echo on
+spool <%= @download_dir %>/CreateDBCatalog_<%= @sanitized_title %>.log append
+alter session set "_oracle_script"=true;
+alter pluggable database pdb$seed close;
+alter pluggable database pdb$seed open;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catalog <%= @oracle_home %>/rdbms/admin/catalog.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catproc <%= @oracle_home %>/rdbms/admin/catproc.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catoctk <%= @oracle_home %>/rdbms/admin/catoctk.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b owminst <%= @oracle_home %>/rdbms/admin/owminst.plb;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b pupbld -u SYSTEM/&&systemPassword <%= @oracle_home %>/sqlplus/admin/pupbld.sql;
+connect "SYSTEM"/"&&systemPassword"
+set echo on
+spool <%= @download_dir %>/sqlPlusHelp.log append
+host perl <%= @download_dir %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b hlpbld -u SYSTEM/&&systemPassword -a 1 <%= @download_dir %>/sqlplus/admin/help/hlpbld.sql 1helpus.sql;
+spool off
+spool off

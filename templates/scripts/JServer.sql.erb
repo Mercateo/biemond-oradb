@@ -1,0 +1,11 @@
+SET VERIFY OFF
+connect "SYS"/"&&sysPassword" as SYSDBA
+set echo on
+spool <%= @download_dir %>/JServer_<%= @sanitized_title %>.log append
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b initjvm <%= @oracle_home %>/javavm/install/initjvm.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b initxml <%= @oracle_home %>/xdk/admin/initxml.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b xmlja <%= @oracle_home %>/xdk/admin/xmlja.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catjava <%= @oracle_home %>/rdbms/admin/catjava.sql;
+connect "SYS"/"&&sysPassword" as SYSDBA
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catxdbj <%= @oracle_home %>/rdbms/admin/catxdbj.sql;
+spool off

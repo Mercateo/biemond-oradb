@@ -1,0 +1,12 @@
+SET VERIFY OFF
+connect "SYS"/"&&sysPassword" as SYSDBA
+set echo on
+spool <%= @download_dir %>/context_<%= @sanitized_title %>.log append
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catctx -a 1  <%= @oracle_home %>/ctx/admin/catctx.sql 1change_on_install 1SYSAUX 1TEMP 1LOCK;
+alter user CTXSYS account unlock identified by "CTXSYS";
+connect "CTXSYS"/"CTXSYS"
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b dr0defin -u CTXSYS/CTXSYS -a 1  <%= @oracle_home %>/ctx/admin/defaults/dr0defin.sql 1\"AMERICAN\";
+connect "SYS"/"&&sysPassword" as SYSDBA
+alter user CTXSYS password expire account lock;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b dbmsxdbt <%= @oracle_home %>/rdbms/admin/dbmsxdbt.sql;
+spool off

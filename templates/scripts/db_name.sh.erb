@@ -1,0 +1,21 @@
+#!/bin/sh
+
+OLD_UMASK=`umask`
+umask 0027
+mkdir -p <%= @oracle_base %>
+mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/adump
+mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/dpdump
+mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/hdump
+mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/pfile
+mkdir -p <%= @oracle_base %>/audit
+mkdir -p <%= @oracle_base %>/cfgtoollogs/dbca/<%= @db_name %>
+umask ${OLD_UMASK}
+PERL5LIB=<%= @oracle_home %>/rdbms/admin:$PERL5LIB; export PERL5LIB
+<% if @cluster_nodes != nil && @cluster_nodes != '' -%>
+ORACLE_SID=<%= @db_name %>1; export ORACLE_SID
+<%- else %>
+ORACLE_SID=<%= @db_name %>; export ORACLE_SID
+<%- end %>
+PATH=<%= @oracle_home %>/bin:$PATH; export PATH
+echo You should Add this entry in the /etc/oratab: <%= @db_name %>:<%= @oracle_home %>:Y
+<%= @oracle_home %>/bin/sqlplus /nolog @<%= @download_dir %>/<%= @sanitized_title %>.sql
