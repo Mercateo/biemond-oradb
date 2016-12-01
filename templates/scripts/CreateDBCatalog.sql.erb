@@ -13,6 +13,6 @@ host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %>
 connect "SYSTEM"/"&&systemPassword"
 set echo on
 spool <%= @download_dir %>/sqlPlusHelp.log append
-host perl <%= @download_dir %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b hlpbld -u SYSTEM/&&systemPassword -a 1 <%= @download_dir %>/sqlplus/admin/help/hlpbld.sql 1helpus.sql;
+host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b hlpbld -u SYSTEM/&&systemPassword -a 1 <%= @oracle_home %>/sqlplus/admin/help/hlpbld.sql 1helpus.sql;
 spool off
 spool off
