@@ -6,7 +6,7 @@ DEFINE systemPassword = <%= @system_password %>
 <% if @cluster_nodes != nil && @cluster_nodes != '' -%>
 host <%= @oracle_home %>/bin/orapwd file=<%= @data_file_destination %>/<%= @db_name %>/orapw<%= @db_name %> force=y format=12 dbuniquename=<%= @db_name %>
 host <%= @grid_home %>/bin/setasmgidwrap o=<%= @oracle_home %>/bin/oracle
-host <%= @oracle_home %>/bin/srvctl add database -d <%= @db_name %> -pwfile <%= @data_file_destination %>/<%= @db_name %>/orapw<%= @db_name %> -o <%= @oracle_home %> -p <%= @data_file_destination %>/<%= @db_name %>/spfile<%= @db_name %>.ora -n <%= @db_name %> -a "<%= @data_file_destination %>,<%= @recovery_area_destination %>"
+host <%= @oracle_home %>/bin/srvctl add database -d <%= @db_name %> -pwfile <%= @data_file_destination %>/<%= @db_name %>/orapw<%= @db_name %> -o <%= @oracle_home %> -p <%= @data_file_destination %>/<%= @db_name %>/spfile<%= @db_name %>.ora -n <%= @db_name %> -a "<%= @data_file_destination.gsub(/\+/, "") %>,<%= @recovery_area_destination.gsub(/\+/, "") %>"
 host <%= @oracle_home %>/bin/srvctl add instance -d <%= @db_name %> -i <%= @db_name %>1 -n <%= @hostname %>
 host <%= @oracle_home %>/bin/srvctl add instance -d <%= @db_name %> -i <%= @db_name %>2 -n <%= @remote_node %>
 host <%= @oracle_home %>/bin/srvctl disable database -d <%= @db_name %>
