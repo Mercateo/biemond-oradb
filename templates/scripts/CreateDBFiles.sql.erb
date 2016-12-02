@@ -1,7 +1,7 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/CreateDBFiles_<%= @sanitized_title %>.log append
+spool <%= @download_dir %>/CreateDBFiles_<%= @title %>.log append
 <% if @cluster_nodes != nil && @cluster_nodes != '' -%>
 CREATE SMALLFILE UNDO TABLESPACE "UNDOTBS2" DATAFILE  SIZE 200M AUTOEXTEND ON NEXT  5120K MAXSIZE UNLIMITED;
 <%- end %>

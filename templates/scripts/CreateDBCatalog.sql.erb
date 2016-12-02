@@ -1,7 +1,7 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/CreateDBCatalog_<%= @sanitized_title %>.log append
+spool <%= @download_dir %>/CreateDBCatalog_<%= @title %>.log append
 alter session set "_oracle_script"=true;
 alter pluggable database pdb$seed close;
 alter pluggable database pdb$seed open;

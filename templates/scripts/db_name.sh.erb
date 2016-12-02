@@ -9,6 +9,15 @@ mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/hdump
 mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/pfile
 mkdir -p <%= @oracle_base %>/audit
 mkdir -p <%= @oracle_base %>/cfgtoollogs/dbca/<%= @db_name %>
+<% if @cluster_nodes != nil && @cluster_nodes != '' -%>
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/adump
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/dpdump
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/hdump
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>/admin/<%= @db_name %>/pfile
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>/audit
+ssh <%= @remote_node %> mkdir -p <%= @oracle_base %>/cfgtoollogs/dbca/<%= @db_name %>
+<%- end %>
 umask ${OLD_UMASK}
 PERL5LIB=<%= @oracle_home %>/rdbms/admin:$PERL5LIB; export PERL5LIB
 export ORACLE_HOME=<%= @oracle_home %>
@@ -19,4 +28,4 @@ export ORACLE_SID=<%= @db_name %>
 <%- end %>
 PATH=<%= @oracle_home %>/bin:$PATH; export PATH
 echo You should Add this entry in the /etc/oratab: <%= @db_name %>:<%= @oracle_home %>:Y
-<%= @oracle_home %>/bin/sqlplus /nolog @<%= @download_dir %>/<%= @sanitized_title %>.sql
+<%= @oracle_home %>/bin/sqlplus /nolog @<%= @download_dir %>/<%= @title %>.sql

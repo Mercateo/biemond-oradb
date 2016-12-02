@@ -16,17 +16,17 @@ host <%= @oracle_home %>/bin/srvctl disable database -d <%= @db_name %>
 host <%= @oracle_home %>/bin/orapwd file=<%= @data_file_destination %>/<%= @db_name %>/orapw<%= @db_name %> force=y format=12
 host <%= @grid_home %>/bin/setasmgidwrap o=<%= @oracle_home %>/bin/oracle
 <%- end %>
-@<%= @download_dir %>/CreateDB_<%= @sanitized_title %>.sql
-@<%= @download_dir %>/CreateDBFiles_<%= @sanitized_title %>.sql
-@<%= @download_dir %>/CreateDBCatalog_<%= @sanitized_title %>.sql
-<% if @java_db_option == true -%>@<%= @download_dir %>/JServer_<%= @sanitized_title %>.sql<%- end %>
-<% if @context_db_options == true -%>@<%= @download_dir %>/context_<%= @sanitized_title %>.sql<%- end %>
-<% if @ordinst_db_options == true -%>@<%= @download_dir %>/ordinst_<%= @sanitized_title %>.sql<%- end %>
-<% if @interMedia_db_options == true -%>@<%= @download_dir %>/interMedia_<%= @sanitized_title %>.sql<%- end %>
-<% if @apex_db_options == true -%>@<%= @download_dir %>/apex_<%= @sanitized_title %>.sql<%- end %>
-<% if @cluster_nodes != nil && @cluster_nodes != '' -%>@<%= @download_dir %>/CreateClustDBViews_<%= @sanitized_title %>.sql<%- end %>
+@<%= @download_dir %>/CreateDB_<%= @title %>.sql
+@<%= @download_dir %>/CreateDBFiles_<%= @title %>.sql
+@<%= @download_dir %>/CreateDBCatalog_<%= @title %>.sql
+<% if @java_db_option == true -%>@<%= @download_dir %>/JServer_<%= @title %>.sql<%- end %>
+<% if @context_db_options == true -%>@<%= @download_dir %>/context_<%= @title %>.sql<%- end %>
+<% if @ordinst_db_options == true -%>@<%= @download_dir %>/ordinst_<%= @title %>.sql<%- end %>
+<% if @interMedia_db_options == true -%>@<%= @download_dir %>/interMedia_<%= @title %>.sql<%- end %>
+<% if @apex_db_options == true -%>@<%= @download_dir %>/apex_<%= @title %>.sql<%- end %>
+<% if @cluster_nodes != nil && @cluster_nodes != '' -%>@<%= @download_dir %>/CreateClustDBViews_<%= @title %>.sql<%- end %>
 host echo "SPFILE='+DATA/<%= @db_name %>/spfile<%= @db_name %>.ora'" > <%= @oracle_home %>/dbs/init<%= @db_name %>.ora
-@<%= @download_dir %>/lockAccount_<%= @sanitized_title %>.sql
-@<%= @download_dir %>/postDBCreation_<%= @sanitized_title %>.sql
+@<%= @download_dir %>/lockAccount_<%= @title %>.sql
+@<%= @download_dir %>/postDBCreation_<%= @title %>.sql
 
 

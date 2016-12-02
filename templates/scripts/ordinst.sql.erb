@@ -1,6 +1,6 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/ordinst_<%= @sanitized_title %>.log append
+spool <%= @download_dir %>/ordinst_<%= @title %>.log append
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b ordinst -a 1 <%= @oracle_home %>/ord/admin/ordinst.sql 1SYSAUX 1SYSAUX;
 spool off

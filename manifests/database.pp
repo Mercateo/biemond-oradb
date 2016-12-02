@@ -146,144 +146,33 @@ define oradb::database(
   }
 
   if ( $use_script == true ) {
-    # only tested with oracle 12c
-    file { "${download_dir}/${sanitized_title}.sql":
-      ensure  => present,
-      content => template("${module_name}/scripts/db_name.sql.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
+    oradb::database_script_files { "$sanitized_title":
+      oracle_base                    => $oracle_base,
+      oracle_home                    => $oracle_home,
+      grid_home                      => $grid_home,
+      user                           => $user,
+      group                          => $group,
+      download_dir                   => $download_dir,
+		  db_name                        => $db_name,
+		  db_domain                      => $db_domain,
+		  sys_password                   => $sys_password,
+		  system_password                => $system_password,
+		  data_file_destination          => $data_file_destination,
+		  recovery_area_destination      => $recovery_area_destination,
+		  character_set                  => $character_set,
+		  nationalcharacter_set          => $nationalcharacter_set,
+		  init_params                    => $init_params,
+		  cluster_nodes                  => $cluster_nodes,
+		  remote_node                    => $remote_node,
+		  container_database             => $container_database, 
+		  audit_trail                    => $audit_trail,
+		  db_recovery_file_dest_size_mb  => $db_recovery_file_dest_size_mb,
+		  java_db_option                 => $java_db_option,
+		  context_db_option              => $context_db_option,
+		  ordinst_db_option              => $ordinst_db_option,
+		  interMedia_db_option           => $interMedia_db_option,
+		  apex_db_option                 => $apex_db_option,   
     }
-    
-    file { "${download_dir}/${sanitized_title}.sh":
-      ensure  => present,
-      content => template("${module_name}/scripts/db_name.sh.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-    
-    file { "${download_dir}/CreateDB_${sanitized_title}.sql":
-      ensure  => present,
-      content => template("${module_name}/scripts/CreateDB.sql.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-    
-    file { "${download_dir}/CreateDBCatalog_${sanitized_title}.sql":
-      ensure  => present,
-      content => template("${module_name}/scripts/CreateDBCatalog.sql.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-    
-    file { "${download_dir}/CreateDBFiles_${sanitized_title}.sql":
-      ensure  => present,
-      content => template("${module_name}/scripts/CreateDBFiles.sql.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-
-    file { "${download_dir}/init_${sanitized_title}.ora":
-      ensure  => present,
-      content => template("${module_name}/scripts/init.ora.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-    
-    file { "${download_dir}/lockAccount_${sanitized_title}.sql":
-      ensure  => present,
-      content => template("${module_name}/scripts/lockAccount.sql.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-    
-    file { "${download_dir}/postDBCreation_${sanitized_title}.sql":
-      ensure  => present,
-      content => template("${module_name}/scripts/postDBCreation.sql.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-        
-    if ( $cluster_nodes != undef) {
-	    file { "${download_dir}/CreateClustDBViews_${sanitized_title}.sql":
-	      ensure  => present,
-	      content => template("${module_name}/scripts/CreateClustDBViews.sql.erb"),
-	      mode    => '0775',
-	      owner   => $user,
-	      group   => $group,
-	      before  => Exec["oracle database ${title}"],
-	    } 
-	  }
-	  
-    if ( $apex_db_option == true) {
-      file { "${download_dir}/apex_${sanitized_title}.sql":
-        ensure  => present,
-        content => template("${module_name}/scripts/apex.sql.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      } 
-    }
-    
-    if ( $context_db_option == true) {
-      file { "${download_dir}/context_${sanitized_title}.sql":
-        ensure  => present,
-        content => template("${module_name}/scripts/context.sql.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      } 
-    } 
-    
-    if ( $java_db_option == true) {
-      file { "${download_dir}/JServer_${sanitized_title}.sql":
-        ensure  => present,
-        content => template("${module_name}/scripts/JServer.sql.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      } 
-    }
-    
-    if ( $interMedia_db_option == true) {
-      file { "${download_dir}/interMedia_${sanitized_title}.sql":
-        ensure  => present,
-        content => template("${module_name}/scripts/interMedia.sql.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      } 
-    }
-    
-    if ( $ordinst_db_option == true) {
-      file { "${download_dir}/ordinst_${sanitized_title}.sql":
-        ensure  => present,
-        content => template("${module_name}/scripts/ordinst.sql.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      } 
-    }   
   } 
 
   if $action == 'create' {

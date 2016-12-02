@@ -1,8 +1,8 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/CreateDB_<%= @sanitized_title %>.log append
-startup nomount pfile="<%= @download_dir %>/init_<%= @sanitized_title %>.ora";
+spool <%= @download_dir %>/CreateDB_<%= @title %>.log append
+startup nomount pfile="<%= @download_dir %>/init_<%= @title %>.ora";
 CREATE DATABASE "<%= @db_name %>"
 MAXINSTANCES 8
 MAXLOGHISTORY 1
@@ -23,5 +23,5 @@ enable pluggable database;
 set linesize 2048;
 column ctl_files NEW_VALUE ctl_files;
 select concat('control_files=''', concat(replace(value, ', ', ''','''), '''')) ctl_files from v$parameter where name ='control_files';
-host echo &ctl_files >><%= @download_dir %>/init_<%= @sanitized_title %>.ora;
+host echo &ctl_files >><%= @download_dir %>/init_<%= @title %>.ora;
 spool off

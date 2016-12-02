@@ -1,6 +1,6 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/apex_<%= @sanitized_title %>.log append
+spool <%= @download_dir %>/apex_<%= @title %>.log append
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catapx -a 1  <%= @oracle_home %>/apex/catapx.sql 1change_on_install 1SYSAUX 1SYSAUX 1TEMP 1/i/ 1NONE;
 spool off

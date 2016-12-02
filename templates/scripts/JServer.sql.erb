@@ -1,7 +1,7 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/JServer_<%= @sanitized_title %>.log append
+spool <%= @download_dir %>/JServer_<%= @title %>.log append
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b initjvm <%= @oracle_home %>/javavm/install/initjvm.sql;
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b initxml <%= @oracle_home %>/xdk/admin/initxml.sql;
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b xmlja <%= @oracle_home %>/xdk/admin/xmlja.sql;

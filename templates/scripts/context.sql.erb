@@ -1,7 +1,7 @@
 SET VERIFY OFF
 connect "SYS"/"&&sysPassword" as SYSDBA
 set echo on
-spool <%= @download_dir %>/context_<%= @sanitized_title %>.log append
+spool <%= @download_dir %>/context_<%= @title %>.log append
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catctx -a 1  <%= @oracle_home %>/ctx/admin/catctx.sql 1change_on_install 1SYSAUX 1TEMP 1LOCK;
 alter user CTXSYS account unlock identified by "CTXSYS";
 connect "CTXSYS"/"CTXSYS"
