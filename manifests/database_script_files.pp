@@ -37,7 +37,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
     
     file { "${download_dir}/${title}.sh":
@@ -46,7 +45,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
     
     file { "${download_dir}/CreateDB_${title}.sql":
@@ -55,7 +53,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
     
     file { "${download_dir}/CreateDBCatalog_${title}.sql":
@@ -64,7 +61,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
     
     file { "${download_dir}/CreateDBFiles_${title}.sql":
@@ -73,7 +69,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
 
     file { "${download_dir}/init_${title}.ora":
@@ -82,7 +77,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
     
     file { "${download_dir}/lockAccount_${title}.sql":
@@ -91,7 +85,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
     
     file { "${download_dir}/postDBCreation_${title}.sql":
@@ -100,7 +93,6 @@ define oradb::database_script_files(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      before  => Exec["oracle database ${title}"],
     }
         
     if ( $cluster_nodes != undef) {
@@ -110,7 +102,6 @@ define oradb::database_script_files(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        before  => Exec["oracle database ${title}"],
       } 
     }
     
@@ -121,7 +112,6 @@ define oradb::database_script_files(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        before  => Exec["oracle database ${title}"],
       } 
     }
     
@@ -132,7 +122,6 @@ define oradb::database_script_files(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        before  => Exec["oracle database ${title}"],
       } 
     } 
     
@@ -143,7 +132,6 @@ define oradb::database_script_files(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        before  => Exec["oracle database ${title}"],
       } 
     }
     
@@ -154,7 +142,6 @@ define oradb::database_script_files(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        before  => Exec["oracle database ${title}"],
       } 
     }
     
@@ -165,7 +152,6 @@ define oradb::database_script_files(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        before  => Exec["oracle database ${title}"],
       } 
     }   
   

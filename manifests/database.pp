@@ -171,7 +171,8 @@ define oradb::database(
 		  context_db_option              => $context_db_option,
 		  ordinst_db_option              => $ordinst_db_option,
 		  interMedia_db_option           => $interMedia_db_option,
-		  apex_db_option                 => $apex_db_option,   
+		  apex_db_option                 => $apex_db_option,
+		  before                         => Exec["oracle database ${title}"],
     }
   } 
 
