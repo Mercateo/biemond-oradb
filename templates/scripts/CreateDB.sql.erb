@@ -16,8 +16,9 @@ SMALLFILE DEFAULT TEMPORARY TABLESPACE TEMP TEMPFILE SIZE 20M AUTOEXTEND ON NEXT
 SMALLFILE UNDO TABLESPACE "UNDOTBS1" DATAFILE  SIZE 200M AUTOEXTEND ON NEXT  5120K MAXSIZE UNLIMITED
 CHARACTER SET <%= @character_set %>
 NATIONAL CHARACTER SET <%= @nationalcharacter_set %>
-LOGFILE GROUP 1  SIZE 50M,
-GROUP 2  SIZE 50M
+LOGFILE <% @redo_logs.each_with_index do |(thred, redo_log), index| -%>
+<%= if thred == 1 -%><% if index != 1 -%>,<% end -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% end -%>
+<%- end -%>
 USER SYS IDENTIFIED BY "&&sysPassword" USER SYSTEM IDENTIFIED BY "&&systemPassword"
 enable pluggable database;
 set linesize 2048;

@@ -2,10 +2,10 @@ SET VERIFY OFF
 spool <%= @download_dir %>/postDBCreation_<%= @title %>.log append
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catbundleapply <%= @oracle_home %>/rdbms/admin/catbundleapply.sql;
 <% if @cluster_nodes != nil && @cluster_nodes != '' -%>
-select group# from v$log where group# =3;
-select group# from v$log where group# =4;
-ALTER DATABASE ADD LOGFILE THREAD 2 GROUP 3  SIZE 50M,
- GROUP 4  SIZE 50M;
+ALTER DATABASE ADD LOGFILE THREAD 2
+<% @redo_logs.each_with_index do |(thred, redo_log), index| -%>
+<%= if thred == 2 -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% if index != redo_logs.count -%>,<% end -%><% end -%>
+<%- end -%>
 ALTER DATABASE ENABLE PUBLIC THREAD 2;
 host echo cluster_database=true >><%= @download_dir %>/init_<%= @title %>.ora;
 <% end -%>
