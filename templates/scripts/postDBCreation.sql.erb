@@ -3,9 +3,13 @@ spool <%= @download_dir %>/postDBCreation_<%= @title %>.log append
 host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %> -b catbundleapply <%= @oracle_home %>/rdbms/admin/catbundleapply.sql;
 <% if @cluster_nodes != nil && @cluster_nodes != '' -%>
 ALTER DATABASE ADD LOGFILE THREAD 2
-<% @redo_logs.each_with_index do |(thred, redo_log), index| -%>
-<% if thred == 2 -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% if index != redo_logs.count -%>,<% end -%><% end -%>
+<% @redo_logs.each_with_index do |(thread, thread_redo_log), index| -%>
+<% if thread == '2' -%>
+<% thread_redo_log.each_with_index do |redo_log,index| -%>
+ GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% if index != thread_redo_log.count - Integer(1) -%>,<% else %>;<%- end -%>
 <%- end -%>
+<%- end -%>
+<%- end %>
 ALTER DATABASE ENABLE PUBLIC THREAD 2;
 host echo cluster_database=true >><%= @download_dir %>/init_<%= @title %>.ora;
 <% end -%>
