@@ -4,7 +4,7 @@ host perl <%= @oracle_home %>/rdbms/admin/catcon.pl -n 1 -l <%= @download_dir %>
 <% if @cluster_nodes != nil && @cluster_nodes != '' -%>
 ALTER DATABASE ADD LOGFILE THREAD 2
 <% @redo_logs.each_with_index do |(thred, redo_log), index| -%>
-<%= if thred == 2 -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% if index != redo_logs.count -%>,<% end -%><% end -%>
+<% if thred == 2 -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% if index != redo_logs.count -%>,<% end -%><% end -%>
 <%- end -%>
 ALTER DATABASE ENABLE PUBLIC THREAD 2;
 host echo cluster_database=true >><%= @download_dir %>/init_<%= @title %>.ora;
