@@ -168,6 +168,7 @@ define oradb::database(
 		  container_database             => $container_database, 
 		  audit_trail                    => $audit_trail,
 		  db_recovery_file_dest_size_mb  => $db_recovery_file_dest_size_mb,
+		  redo_logs                      => $redo_logs,
 		  java_db_option                 => $java_db_option,
 		  context_db_option              => $context_db_option,
 		  ordinst_db_option              => $ordinst_db_option,
