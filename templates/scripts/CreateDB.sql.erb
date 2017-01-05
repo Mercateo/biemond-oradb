@@ -17,7 +17,7 @@ SMALLFILE UNDO TABLESPACE "UNDOTBS1" DATAFILE  SIZE 200M AUTOEXTEND ON NEXT  512
 CHARACTER SET <%= @character_set %>
 NATIONAL CHARACTER SET <%= @nationalcharacter_set %>
 LOGFILE <% @redo_logs.each_with_index do |(thred, redo_log), index| -%>
-<%= if thred == 1 -%><% if index != 1 -%>,<% end -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% end -%>
+<% if thred == 1 -%><% if index != 1 -%>,<% end -%> GROUP <%= redo_log['group'] -%> SIZE <%= redo_log['size'] -%> BLOCKSIZE <%= redo_log['blocksize'] -%><% end -%>
 <%- end -%>
 USER SYS IDENTIFIED BY "&&sysPassword" USER SYSTEM IDENTIFIED BY "&&systemPassword"
 enable pluggable database;

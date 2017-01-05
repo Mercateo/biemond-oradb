@@ -23,6 +23,7 @@ define oradb::database_script_files(
   $container_database             = undef, 
   $audit_trail                    = undef,
   $db_recovery_file_dest_size_mb  = undef,
+  $redo_logs                      = undef,
   $java_db_option                 = undef,
   $context_db_option              = undef,
   $ordinst_db_option              = undef,

@@ -43,6 +43,7 @@ define oradb::database(
   $audit_trail                    = 'DB',
   $db_recovery_file_dest_size_mb  = '1000',
   $spfile                         = '{ORACLE_HOME}/dbs/spfile{SID}.ora',
+  $redo_logs                 = undef,
   $use_script                = false,
   $java_db_option            = true,
   $context_db_option         = true,
