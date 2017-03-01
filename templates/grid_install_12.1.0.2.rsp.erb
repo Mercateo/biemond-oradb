@@ -379,9 +379,8 @@ oracle.install.asm.diskGroup.AUSize=<%= @disk_au_size %>
 #-------------------------------------------------------------------------------
 oracle.install.asm.diskGroup.disks=<% @disks.each_with_index do |(fail_group, fail_group_disks), index| -%>
 <%- fail_group_disks.each_with_index do |fail_group_disk,index| -%>
-<%= fail_group_disk['path'] -%><%- if index != fail_group_disks.count - Integer(1) -%>,<%- end -%>
-<%- end -%>
-<%- end -%>
+<%= fail_group_disk['path'] -%>,<%- end -%><%- end -%>
+
 -------------------------------------------------------------------------------
 # The disk discovery string to be used to discover the disks used create a ASM DiskGroup
 #
